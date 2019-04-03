@@ -26,7 +26,9 @@ dependencies {
 ## 初始化
 
 ``` java
-// WIFI管理器
+/**
+* WIFI管理器
+**/
 mWiFiManager = new WiFiManager(getApplicationContext());
 ```
 
