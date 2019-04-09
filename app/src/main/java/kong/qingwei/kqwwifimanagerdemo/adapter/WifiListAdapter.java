@@ -74,6 +74,8 @@ public class WifiListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
+        ScanResult scanResult;
+
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(R.layout.item_wifi, null);
@@ -84,7 +86,7 @@ public class WifiListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ScanResult scanResult = scanResults.get(position);
+        scanResult = scanResults.get(position);
         holder.ssid.setText("热点名称：" + scanResult.SSID + "\n信号强度：" + WifiManager.calculateSignalLevel(scanResult.level, 5) + "/5\n加密方式：" + scanResult.capabilities);
         return convertView;
     }

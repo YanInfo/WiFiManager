@@ -378,7 +378,7 @@ public class BaseWiFiManager {
             boolean isDisable = mWifiManager.disableNetwork(netId);
             boolean isRemove = mWifiManager.removeNetwork(netId);
             boolean isSave = mWifiManager.saveConfiguration();
-            return isDisable && isRemove && isSave;
+            return (isDisable && isRemove && isSave);
         }
         return false;
     }
