@@ -306,10 +306,10 @@ public class WiFiManager extends BaseWiFiManager {
                         case ASSOCIATED: // 已经关联
                             Log.i(TAG, "onReceive: ASSOCIATED: // 已经关联");
                             break;
-                        case FOUR_WAY_HANDSHAKE:
+                        case FOUR_WAY_HANDSHAKE: // 四次握手
                             Log.i(TAG, "onReceive: FOUR_WAY_HANDSHAKE:");
                             break;
-                        case GROUP_HANDSHAKE:
+                        case GROUP_HANDSHAKE:  // 组握手
                             Log.i(TAG, "onReceive: GROUP_HANDSHAKE:");
                             break;
                         case COMPLETED: // 完成
@@ -322,7 +322,7 @@ public class WiFiManager extends BaseWiFiManager {
                                 mCallBackHandler.sendMessage(wifiConnectSuccessMessage);
                             }
                             break;
-                        case DORMANT:
+                        case DORMANT: // 休眠
                             Log.i(TAG, "onReceive: DORMANT:");
                             break;
                         case UNINITIALIZED: // 未初始化
