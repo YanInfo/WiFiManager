@@ -3,13 +3,18 @@ package com.kongqw.wifilibrary;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.ResultReceiver;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,12 +23,17 @@ import com.kongqw.wifilibrary.listener.OnWifiConnectListener;
 import com.kongqw.wifilibrary.listener.OnWifiEnabledListener;
 import com.kongqw.wifilibrary.listener.OnWifiScanResultsListener;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 
 /**
- * Created by kqw on 2016/8/2.
+ * /**
+ *
+ * @Author: zhangyan
+ * @Date: 2019/4/10 9:32
  * WifiManager : https://developer.android.com/reference/android/net/wifi/WifiManager.html
  * WifiConfiguration : https://developer.android.com/reference/android/net/wifi/WifiConfiguration.html
  * ScanResult : https://developer.android.com/reference/android/net/wifi/ScanResult.html
@@ -41,6 +51,7 @@ public class WiFiManager extends BaseWiFiManager {
     private static final int WIFI_CONNECT_LOG = 4;
     private static final int WIFI_CONNECT_SUCCESS = 5;
     private static final int WIFI_CONNECT_FAILURE = 6;
+    private static final String DEFAULT_AP_PASSWORD = "12345678";
 
     private WiFiManager(Context context) {
         super(context);
@@ -76,13 +87,11 @@ public class WiFiManager extends BaseWiFiManager {
     }
 
     /**
-     * 创建热点
+     * 创建热点，这里只能是7.0或7.0之前的版本
+     * 手动设置热点名和密码
      */
-    public void createWifiHotspot() {
-        if (mWifiManager.isWifiEnabled()) {
-            //如果wifi处于打开状态，则关闭wifi,
-            mWifiManager.setWifiEnabled(false);
-        }
+    public void createWifiHotspot7() {
+
         WifiConfiguration config = new WifiConfiguration();
         config.SSID = "性感荷官在线发脾气";
         config.preSharedKey = "123456789";
@@ -101,7 +110,6 @@ public class WiFiManager extends BaseWiFiManager {
             }
         }
         config.allowedKeyManagement.set(indexOfWPA2_PSK);
-        // config.allowedPairwiseCiphers.set(6);
 
         config.allowedPairwiseCiphers
                 .set(WifiConfiguration.PairwiseCipher.TKIP);
@@ -109,15 +117,16 @@ public class WiFiManager extends BaseWiFiManager {
         config.allowedPairwiseCiphers
                 .set(WifiConfiguration.PairwiseCipher.CCMP);
         config.status = WifiConfiguration.Status.ENABLED;
+
         //通过反射调用设置热点
         try {
             Method method = mWifiManager.getClass().getMethod(
                     "setWifiApEnabled", WifiConfiguration.class, Boolean.TYPE);
             boolean enable = (Boolean) method.invoke(mWifiManager, config, true);
             if (enable) {
-                Log.d(TAG, "&&&&&&&&&&&&&&&&&&&&&&&&&热点已经开启");
+                Log.i(TAG, "热点已经开启##################################");
             } else {
-                Log.d(TAG, "&&&&&&&&&&&&&&&&&&&&&&&&&热点开启失败");
+                Log.i(TAG, "热点开启失败##################################");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,9 +134,48 @@ public class WiFiManager extends BaseWiFiManager {
     }
 
     /**
+     * 8.0 开启热点方法
+     * 这里使用WPA2加密
+     *
+     * @param ssid
+     * @param password
+     */
+    public void createWifiHotspot8(String ssid, String password) {
+
+        WifiConfiguration wifiConfig = new WifiConfiguration();
+        Log.i(TAG, "热点准备开启##################################");
+
+        // 清理配置
+        wifiConfig.SSID = new String(ssid);
+        wifiConfig.allowedAuthAlgorithms.clear();
+        wifiConfig.allowedGroupCiphers.clear();
+        wifiConfig.allowedKeyManagement.clear();
+        wifiConfig.allowedPairwiseCiphers.clear();
+        wifiConfig.allowedProtocols.clear();
+
+        // 如果密码为空或者小于8位数，则使用默认的密码
+        if (null != password && password.length() >= 8) {
+            wifiConfig.preSharedKey = password;
+        } else {
+            wifiConfig.preSharedKey = DEFAULT_AP_PASSWORD;
+        }
+        wifiConfig.hiddenSSID = false;
+        wifiConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        wifiConfig.allowedKeyManagement.set(4);
+        wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        wifiConfig.status = WifiConfiguration.Status.ENABLED;
+
+    }
+
+    /**
      * 关闭热点
      */
-    public void closeWifiHotspot() {
+    public void closeWifiHotspot8() {
         try {
             Method method = mWifiManager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class, boolean.class);
             method.invoke(mWifiManager, null, false);
@@ -135,6 +183,7 @@ public class WiFiManager extends BaseWiFiManager {
             e.printStackTrace();
         }
     }
+
 
     /**
      * 连接到开放网络

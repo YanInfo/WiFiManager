@@ -5,7 +5,8 @@ import android.net.wifi.ScanResult;
 import java.util.List;
 
 /**
- * Created by kqw on 2016/8/4.
+ * @Author: zhangyan
+ * @Date: 2019/4/10 10:17
  * WIFI扫描结果的回调接口
  */
 public interface OnWifiScanResultsListener {

@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by kongqingwei on 2017/2/17.
- * BaseWiFiManager
+ * @Author: zhangyan
+ * @Date: 2019/4/10 10:15
+ * WiFiManager基础类
  */
 public class BaseWiFiManager {
 
@@ -38,7 +39,7 @@ public class BaseWiFiManager {
      * @param ssid SSID
      * @return NetworkId
      */
-    int setOpenNetwork(@NonNull  String ssid) {
+    int setOpenNetwork(@NonNull String ssid) {
         if (TextUtils.isEmpty(ssid)) {
             return -1;
         }

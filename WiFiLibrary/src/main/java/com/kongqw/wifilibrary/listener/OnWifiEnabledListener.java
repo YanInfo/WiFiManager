@@ -1,7 +1,8 @@
 package com.kongqw.wifilibrary.listener;
 
 /**
- * Created by kqw on 2016/8/4.
+ * @Author: zhangyan
+ * @Date: 2019/4/10 10:19
  * WIFI打开关闭的回调接口
  */
 public interface OnWifiEnabledListener {

@@ -32,6 +32,11 @@ import java.util.List;
 import kong.qingwei.kqwwifimanagerdemo.adapter.WifiListAdapter;
 import kong.qingwei.kqwwifimanagerdemo.view.ConnectWifiDialog;
 
+/**
+ * @Author: zhangyan
+ * @Date: 2019/4/10 10:30
+ * 主活动
+ */
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnWifiScanResultsListener, OnWifiConnectListener, OnWifiEnabledListener {
 
     private static final String TAG = "MainActivity";
@@ -77,9 +82,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mWiFiManager.createWifiHotspot();
+                    mWiFiManager.createWifiHotspot8("性感荷官在线发脾气", "123456789");
                 } else {
-                    mWiFiManager.closeWifiHotspot();
+                    // mWiFiManager.closeWifiHotspot();
                 }
             }
         });
@@ -225,9 +230,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     public void connect(String password) {
                         mWiFiManager.connectWPA2Network(scanResult.SSID, password);
                     }
-                }.setSsid(scanResult.SSID).show();   //设置弹出框的wifi名
+                }.setSsid(scanResult.SSID).show();
                 break;
-            case OPEN: // 开放网络
+            case OPEN:
                 mWiFiManager.connectOpenNetwork(scanResult.SSID);
                 break;
         }
@@ -235,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     /**
      * WIFI列表长按
+     *
      * @param parent   parent
      * @param view     view
      * @param position position
@@ -341,4 +347,5 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         switchCompat.setChecked(enabled);
         frameLayout.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
+
 }

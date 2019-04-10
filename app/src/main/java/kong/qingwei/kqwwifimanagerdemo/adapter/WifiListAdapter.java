@@ -19,8 +19,9 @@ import java.util.List;
 import kong.qingwei.kqwwifimanagerdemo.R;
 
 /**
- * Created by kqw on 2016/8/2.
- * Wifi列表的数据适配器
+ * @Author: zhangyan
+ * @Date: 2019/4/10 10:46
+ * Wifi列表ListView的数据适配器
  */
 public class WifiListAdapter extends BaseAdapter {
 
@@ -30,6 +31,7 @@ public class WifiListAdapter extends BaseAdapter {
 
     /**
      * 构造函数
+     *
      * @param context
      */
     public WifiListAdapter(Context context) {
@@ -39,6 +41,7 @@ public class WifiListAdapter extends BaseAdapter {
 
     /**
      * 更新数据
+     *
      * @param scanResults
      */
     public void refreshData(List<ScanResult> scanResults) {

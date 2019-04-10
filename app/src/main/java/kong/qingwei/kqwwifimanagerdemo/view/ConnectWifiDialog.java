@@ -15,8 +15,10 @@ import android.widget.Toast;
 import kong.qingwei.kqwwifimanagerdemo.R;
 
 /**
- * Created by kongqingwei on 2017/2/20.
- */
+ * @Author: zhangyan
+ * @Date: 2019/4/10 10:17\
+ * 连接wifi监听
+ **/
 
 public abstract class ConnectWifiDialog extends Dialog implements View.OnClickListener {
 
